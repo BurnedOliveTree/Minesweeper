@@ -115,8 +115,13 @@ void output0(short int t[lw][lk], bool h[lw][lk])
 
 void output(short int t[lw][lk], bool h[lw][lk])
 {
+    cout << " ";
+    for (int k=q; k<lk-q; k++)
+        cout << " " << k-q+1;
+    cout << endl;
     for (int w=q; w<lw-q; w++)
     {
+        cout << w-q+1;
         for (int k=q; k<lk-q; k++)
         {
             cout << " ";
