@@ -13,7 +13,6 @@ namespace Game
             values = new int[size+2, size+2];
             show = new bool[size+2, size+2];
         }
-
         void CreateVoid()
         {
             for (int i = size + 1; i >= 0; i--)
@@ -24,7 +23,6 @@ namespace Game
                 values[i, size+1] = 10;
             }
         }
-
         string ToEqualString(int number)
         {
             int desiredDigitAmount = size / 10;
@@ -36,7 +34,6 @@ namespace Game
             }
             return result + Convert.ToString(number);
         }
-
         void Print()
         {
             //Sara tu byla
@@ -70,6 +67,13 @@ namespace Game
                 Console.WriteLine();
             }
         }
+        void Input()
+        {
+            Console.WriteLine("Enter coordinates: (c/r)");
+            int c = int.Parse(Console.ReadLine());
+            int r = int.Parse(Console.ReadLine());
+            show[c, r] = true;
+        }
         static void Main(string[] args)
         {
             int size = 10;
@@ -79,7 +83,11 @@ namespace Game
             }
             Minesweeper game = new Minesweeper(size);
             game.CreateVoid();
-            game.Print();
+            for (int i = 0; i < 5; ++i)
+            {
+                game.Print();
+                game.Input();
+            }
             Console.WriteLine("eoe");
         }
     }
