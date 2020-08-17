@@ -59,6 +59,46 @@ namespace Game
                 result = result + " ";
             return result + Convert.ToString(number);
         }
+        private void WriteColour(int number)
+        {
+            var defaultColour = Console.ForegroundColor;
+            switch (number)
+            {
+                case 0:
+                    Console.ForegroundColor = ConsoleColor.Gray;
+                    break;
+                case 1:
+                    Console.ForegroundColor = ConsoleColor.Blue;
+                    break;
+                case 2:
+                    Console.ForegroundColor = ConsoleColor.Green;
+                    break;
+                case 3:
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    break;
+                case 4:
+                    Console.ForegroundColor = ConsoleColor.DarkBlue;
+                    break;
+                case 5:
+                    Console.ForegroundColor = ConsoleColor.DarkRed;
+                    break;
+                case 6:
+                    Console.ForegroundColor = ConsoleColor.DarkCyan;
+                    break;
+                case 7:
+                    Console.ForegroundColor = ConsoleColor.Yellow;
+                    break;
+                case 8:
+                    Console.ForegroundColor = ConsoleColor.DarkYellow;
+                    break;
+                case 9:
+                    Console.ForegroundColor = ConsoleColor.Black;
+                    break;
+            }
+            Console.Write(ToEqualString(number));
+            Console.ForegroundColor = defaultColour;
+
+        }
         private void Print()
         {
             //Sara tu byla
@@ -79,7 +119,7 @@ namespace Game
                 for (int j = 1; j < size + 1; ++j)
                 {
                     if (show[i, j])
-                        Console.Write(ToEqualString(values[i, j]));
+                        WriteColour(values[i, j]);
                     else
                         Console.Write(hidden);
                 }
