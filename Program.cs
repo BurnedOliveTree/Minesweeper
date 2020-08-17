@@ -94,6 +94,9 @@ namespace Game
             show[c, r] = true;
             if (values[c, r] == 9)
                 return true;
+            if (values[c, r] == 0)
+                if (Spread(c, r))
+                    return true;
             return false;
         }
         private bool Check()
@@ -108,6 +111,24 @@ namespace Game
                         return false;
                 }
             return true;
+        }
+        private bool Spread(int c, int r)
+        {
+            for (int i = -1; i < 2; ++i)
+                for (int j = -1; j < 2; ++j)
+                {
+                    if (i == 0 && j == 0)
+                        continue;
+                    if (!show[c + i, r + j])
+                    {
+                        show[c + i, r + j] = true;
+                        if (values[c + i, r + j] == 0)
+                            Spread(c + i, r + j);
+                        else if (values[c + i, r + j] == 9)
+                            return true;
+                    }
+                }
+            return false;
         }
         private bool Core()
         {
