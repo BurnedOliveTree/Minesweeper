@@ -129,8 +129,25 @@ namespace Game
         private bool Input()
         {
             Console.WriteLine("Enter coordinates: (c/r)");
-            int c = int.Parse(Console.ReadLine());
-            int r = int.Parse(Console.ReadLine());
+            int c, r;
+            try
+            {
+                c = int.Parse(Console.ReadLine());
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("An example of correct coordinates:\n5\n5");
+                c = int.Parse(Console.ReadLine());
+            }
+            try
+            {
+                r = int.Parse(Console.ReadLine());
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("An example of correct coordinates:\n5\n5");
+                r = int.Parse(Console.ReadLine());
+            }
             show[c, r] = true;
             if (values[c, r] == 9)
                 return true;
