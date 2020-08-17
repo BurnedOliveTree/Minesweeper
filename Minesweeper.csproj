@@ -3,6 +3,12 @@
     <PropertyGroup>
         <OutputType>Exe</OutputType>
         <TargetFramework>netcoreapp3.1</TargetFramework>
+        <AssemblyName>Game</AssemblyName>
+        <RootNamespace>Game</RootNamespace>
+        <PackageId>Game</PackageId>
+        <Authors>BurnedOliveTree</Authors>
+        <Company />
+        <Product>Game</Product>
     </PropertyGroup>
 
 </Project>
