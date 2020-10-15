@@ -30,8 +30,8 @@ public class Main {
             int c = 0, r = 0;
             do
             {
-                c = rnd.nextInt(10) + 1;
-                r = rnd.nextInt(10) + 1;
+                c = rnd.nextInt(_size) + 1;
+                r = rnd.nextInt(_size) + 1;
             } while (_values[c][r] == 9 || y == c && x == r);
             _values[c][r] = 9;
             for (int i = -1; i < 2; ++i)
@@ -165,8 +165,7 @@ public class Main {
         if (_values[c][r] == 9)
             return true;
         if (_values[c][r] == 0)
-            if (Spread(c, r))
-                return true;
+            return Spread(c, r);
         return false;
     }
     private boolean Check() {
