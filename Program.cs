@@ -36,8 +36,8 @@ namespace Game
                 int c = 0, r = 0;
                 do
                 {
-                    c = rnd.Next() % 10 + 1;
-                    r = rnd.Next() % 10 + 1;
+                    c = rnd.Next() % _size + 1;
+                    r = rnd.Next() % _size + 1;
                 } while (_values[c, r] == 9 || y == c && x == r);
                 _values[c, r] = 9;
                 for (int i = -1; i < 2; ++i)
