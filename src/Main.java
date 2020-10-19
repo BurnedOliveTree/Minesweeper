@@ -2,10 +2,10 @@ import java.util.Random;
 import java.util.Scanner;
 
 public class Main {
-    private int _size;
-    private int _mines;
-    private int[][] _values;
-    private boolean[][] _show;
+    static private int _size;
+    static private int _mines;
+    static private int[][] _values;
+    static private boolean[][] _show;
 
     private Main(int argSize, int argMines) {
         _size = argSize;
@@ -140,11 +140,14 @@ public class Main {
             try
             {
                 number = in.nextInt();
+                if (number < 1 || number > _size - 2)
+                    throw new ArrayIndexOutOfBoundsException();
                 break;
             }
-            catch (NumberFormatException e)
+            catch (java.lang.ArrayIndexOutOfBoundsException | java.util.InputMismatchException e)
             {
-                System.out.println("Error: Expected a single integer");
+                String t = in.next();
+                System.out.println("Error: Expected a single integer from 1 to "+Integer.toString(_size));
                 continue;
             }
         }
