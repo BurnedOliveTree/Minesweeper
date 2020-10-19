@@ -27,7 +27,7 @@ public class Main {
         int tempMines = 0;
         while (tempMines < _mines)
         {
-            int c = 0, r = 0;
+            int c, r;
             do
             {
                 c = rnd.nextInt(_size) + 1;
@@ -147,7 +147,7 @@ public class Main {
             catch (java.lang.ArrayIndexOutOfBoundsException | java.util.InputMismatchException e)
             {
                 String t = in.next();
-                System.out.println("Error: Expected a single integer from 1 to "+Integer.toString(_size));
+                System.out.println("Error: Expected a single integer from 1 to "+_size);
                 continue;
             }
         }
