@@ -22,8 +22,15 @@ impl Default for Game {
     }
 }
 
+fn get_int() -> u8 {
+    let mut number = String::new();
+    io::stdin().read_line(&mut number).expect("Failed to read line");
+    let number: u8 = number.trim().parse().expect("Excepted an integer");
+    return number;
+}
+
 impl Game {
-    fn build_mines(&mut self, x: u8, y: u8) {
+    fn build_board(&mut self, x: u8, y: u8) {
         let mut mine_x: u8;
         let mut mine_y: u8;
         let mut mines_amount = 0;
@@ -116,12 +123,9 @@ impl Game {
         }
     }
     fn input(&mut self) -> bool {
-        let mut x = String::new();
-        let mut y = String::new();
-        io::stdin().read_line(&mut x).expect("Failed to read line");
-        let x: u8 = x.trim().parse().expect("Excepted an integer");
-        io::stdin().read_line(&mut y).expect("Failed to read line");
-        let y: u8 = y.trim().parse().expect("Excepted an integer");
+        println!("Enter coordinates: (c/r)");
+        let x = get_int();
+        let y = get_int();
         self.uncovered_array[x as usize][y as usize] = true;
         if self.number_array[x as usize][y as usize] == 9 {
             return true;
@@ -132,13 +136,10 @@ impl Game {
         return false;
     }
     fn first_input(&mut self) {
-        let mut x = String::new();
-        let mut y = String::new();
-        io::stdin().read_line(&mut x).expect("Failed to read line");
-        let x: u8 = x.trim().parse().expect("Excepted an integer");
-        io::stdin().read_line(&mut y).expect("Failed to read line");
-        let y: u8 = y.trim().parse().expect("Excepted an integer");
-        self.build_mines(x, y);
+        println!("Enter coordinates: (c/r)");
+        let x = get_int();
+        let y = get_int();
+        self.build_board(x, y);
         self.uncovered_array[x as usize][y as usize] = true;
         if self.number_array[x as usize][y as usize] == 0 { self.spread(x as i16, y as i16); }
     }
@@ -170,6 +171,10 @@ impl Game {
 
 fn main() {
     let mut game: Game = Default::default();
-    println!("starting game");
-    game.core();
+    if game.core() {
+        println!("Congratulations! You've won!");
+    }
+    else {
+        println!("You've lost!");
+    }
 }
