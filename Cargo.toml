@@ -1,6 +1,6 @@
 [package]
 name = "Minesweeper"
-version = "0.1.0"
+version = "0.2.0"
 authors = ["Ksawery Chodyniecki <ksawery.chodyniecki@gmail.com>"]
 edition = "2018"
 
@@ -8,3 +8,4 @@ edition = "2018"
 
 [dependencies]
 rand = "0.5.5"
+termion = "*"
