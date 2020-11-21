@@ -28,9 +28,18 @@ impl Game {
         let mut mine_y: u8;
         let mut mines_amount = 0;
 
+        for column in 0..COLUMN_AMOUNT {
+            self.number_array[column as usize][0] = 10;
+            self.number_array[column as usize][11] = 10;
+        }
+        for row in 0..ROW_AMOUNT {
+            self.number_array[0][row as usize] = 10;
+            self.number_array[11][row as usize] = 10;
+        }
         while mines_amount < MINE_AMOUNT {
-            mine_x = rand::thread_rng().gen_range(1, (COLUMN_AMOUNT + 2) as u8);
-            mine_y = rand::thread_rng().gen_range(1, (ROW_AMOUNT + 2) as u8);
+            println!("{}", mines_amount);
+            mine_x = rand::thread_rng().gen_range(1, (COLUMN_AMOUNT - 1) as u8);
+            mine_y = rand::thread_rng().gen_range(1, (ROW_AMOUNT - 1) as u8);
             if self.number_array[mine_x as usize][mine_y as usize] == 0 {
                 if (mine_x as i16 - x as i16).abs() > 1 && (mine_y as i16 - y as i16).abs() > 1
                 {
@@ -39,33 +48,33 @@ impl Game {
                 }
             }
         }
-        for x in 1..COLUMN_AMOUNT
+        for x in 1..COLUMN_AMOUNT-1
         {
-            for y in 1..ROW_AMOUNT
+            for y in 1..ROW_AMOUNT-1
             {
                 if self.number_array[x][y] == 0
                 {
-                    if self.number_array[x-1][y-1] == 9 { self.number_array[x-1][y-1] += 1 }
-                    if self.number_array[x-1][y] == 9 { self.number_array[x-1][y] += 1 }
-                    if self.number_array[x-1][y+1] == 9 { self.number_array[x-1][y+1] += 1 }
-                    if self.number_array[x][y-1] == 9 { self.number_array[x][y-1] += 1 }
-                    if self.number_array[x][y+1] == 9 { self.number_array[x][y+1] += 1 }
-                    if self.number_array[x+1][y-1] == 9 { self.number_array[x+1][y-1] += 1 }
-                    if self.number_array[x+1][y] == 9 { self.number_array[x+1][y] += 1 }
-                    if self.number_array[x+1][y+1] == 9 { self.number_array[x+1][y+1] += 1 }
+                    if self.number_array[x-1][y-1] == 9 { self.number_array[x][y] += 1 }
+                    if self.number_array[x-1][y] == 9 { self.number_array[x][y] += 1 }
+                    if self.number_array[x-1][y+1] == 9 { self.number_array[x][y] += 1 }
+                    if self.number_array[x][y-1] == 9 { self.number_array[x][y] += 1 }
+                    if self.number_array[x][y+1] == 9 { self.number_array[x][y] += 1 }
+                    if self.number_array[x+1][y-1] == 9 { self.number_array[x][y] += 1 }
+                    if self.number_array[x+1][y] == 9 { self.number_array[x][y] += 1 }
+                    if self.number_array[x+1][y+1] == 9 { self.number_array[x][y] += 1 }
                 }
             }
         }
     }
     fn output(&self) {
         print!(" ");
-        for column in 1..COLUMN_AMOUNT {
+        for column in 1..COLUMN_AMOUNT-1 {
             print!(" {}", column);
         }
         println!();
-        for row in 1..ROW_AMOUNT {
+        for row in 1..ROW_AMOUNT-1 {
             print!("{}", row);
-            for column in 1..COLUMN_AMOUNT {
+            for column in 1..COLUMN_AMOUNT-1 {
                 print!(" ");
                 if self.uncovered_array[row][column] {
                     match self.number_array[row][column] {
@@ -81,7 +90,7 @@ impl Game {
                         9 => print!("{}", color::Fg(color::Magenta)),
                         _ => print!("{}", color::Fg(color::White)),
                     }
-                    print!("{}", self.number_array[row][column])
+                    print!("{}{}", self.number_array[row][column], color::Fg(color::White));
                 }
                 else {
                     print!("{}H", color::Fg(color::White));
@@ -90,19 +99,21 @@ impl Game {
             println!();
         }
     }
-    fn spread(&mut self, x: i16, y: i16) -> bool {
+    fn spread(&mut self, x: i16, y: i16) {
         for i in -1..2 {
             for j in -1..2 {
-                if i == 0 && j == 0 { continue; }
+                if i == 0 && j == 0 {
+                    continue;
+                }
                 if !self.uncovered_array[(x + i) as usize][(y + j) as usize]
                 {
                     self.uncovered_array[(x + i) as usize][(y + j) as usize] = true;
-                    if self.number_array[(x + i) as usize][(y + j) as usize] == 0 { self.spread(x + i, y + j); }
-                    else if self.number_array[(x + i) as usize][(y + j) as usize] == 9 { return true; }
+                    if self.number_array[(x + i) as usize][(y + j) as usize] == 0 {
+                        self.spread(x + i, y + j);
+                    }
                 }
             }
         }
-        return false;
     }
     fn input(&mut self) -> bool {
         let mut x = String::new();
@@ -112,10 +123,11 @@ impl Game {
         io::stdin().read_line(&mut y).expect("Failed to read line");
         let y: u8 = y.trim().parse().expect("Excepted an integer");
         self.uncovered_array[x as usize][y as usize] = true;
+        if self.number_array[x as usize][y as usize] == 9 {
+            return true;
+        }
         if self.number_array[x as usize][y as usize] == 0 {
-            if self.spread(x as i16, y as i16) {
-                return true;
-            }
+            self.spread(x as i16, y as i16)
         }
         return false;
     }
@@ -132,10 +144,12 @@ impl Game {
     }
     fn check(&self) -> bool {
         let mut covered = 0;
-        for column in 1..COLUMN_AMOUNT {
-            for row in 1..ROW_AMOUNT {
+        for column in 1..COLUMN_AMOUNT-1 {
+            for row in 1..ROW_AMOUNT-1 {
                 if !self.uncovered_array[column][row] { covered += 1; }
-                if covered > MINE_AMOUNT { return false; }
+                if covered > MINE_AMOUNT {
+                    return false;
+                }
             }
         }
         return true;
@@ -143,10 +157,12 @@ impl Game {
     fn core(&mut self) -> bool {
         self.first_input();
         self.output();
-        while self.check()
+        while !self.check()
         {
+            if self.input() {
+                return false;
+            }
             self.output();
-            if self.input() { return false; }
         }
         return true;
     }
@@ -154,5 +170,6 @@ impl Game {
 
 fn main() {
     let mut game: Game = Default::default();
+    println!("starting game");
     game.core();
 }
