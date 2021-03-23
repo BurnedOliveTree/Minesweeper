@@ -147,10 +147,11 @@ public class Main {
             catch (java.lang.ArrayIndexOutOfBoundsException | java.util.InputMismatchException e)
             {
                 String t = in.next();
-                System.out.println("Error: Expected a single integer from 1 to "+_size);
+                System.out.println("Error: Expected a single integer from 1 to "+_size+", not "+t);
                 continue;
             }
         }
+        in.close();
         return number;
     }
     private void FirstInput() {
