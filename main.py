@@ -8,6 +8,7 @@ class Board:
         self.size = (size, size)
         self.board = [[0 for x in range(size)] for y in range(size)]
         self.show = [[False for x in range(size)] for y in range(size)]
+        self.mines = mines_amount
         for mine in np.random.choice(list(range(size**2)), mines_amount, replace=False):
             self.board[mine//10][mine%10] = 9
         for x in range(self.size[0]):
@@ -25,6 +26,17 @@ class Board:
                         if self.board[x+i][y+j] == 9:
                             self.board[x][y] += 1
             self.board[x] = tuple(self.board[x])
+    
+    def check(self):
+        count = 0
+        for x in range(self.size[0]):
+            for y in range(self.size[1]):
+                if not self.show[x][y]:
+                    count += 1
+                if count > self.mines:
+                    return False
+        return True
+
     
     def input(self, coords):
         if not self.show[coords[0]][coords[1]]:
@@ -44,6 +56,10 @@ class Board:
                             self.input((coords[0]+i, coords[1]+j))
                         elif self.board[coords[0]+i][coords[1]+j] == 9:
                             return -1
+        elif self.board[coords[0]][coords[1]] == 9:
+            return -1
+        elif self.check():
+            return 1
         return 0
 
     def __str__(self):
@@ -76,7 +92,8 @@ while True:
         coords = int(event)
         result = game.input((coords//10, coords%10))
         update_window(window, game)
-        if result == -1:
+        if not result == 0:
+            print(result)
             break
     except TypeError:
         if event == sg.WIN_CLOSED:
