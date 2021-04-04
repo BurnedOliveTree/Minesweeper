@@ -10,7 +10,6 @@ class Board:
         if mines_amount == None:
             mines_amount = size_x + size_y
         self.size = (size_x, size_y)
-        print(self.size)
         self.board = [[0 for y in range(self.size[1])] for x in range(self.size[0])]
         self.show = [[False for y in range(self.size[1])] for x in range(self.size[0])]
         self.mines = mines_amount
@@ -71,37 +70,39 @@ class Board:
         result = ''
         for x in range(self.size[0]):
             for y in range(self.size[1]):
-                if not self.show[x][y]:
+                if self.show[x][y]:
                     result += ' ' + str(self.board[x][y])
                 else:
                     result += ' H'
             result += '\n'
         return result
 
-def update_window(window, board):
-    for x in range(board.size[0]):
-        for y in range(board.size[1]):
-            if board.show[x][y]:
-                window[str(board.size[1]*x+y)].update(text=str(board.board[x][y]))
+class Game:
+    def __init__(self, board=Board(10)):
+        self.board = board
+        layout = [[sg.Button(str('H'), key=str(self.board.size[1]*x+y)) for y in range(self.board.size[1])] for x in range(self.board.size[0])]
+        self.window = sg.Window("Minesweeper", layout, finalize=True)
 
-game = Board(12, 4)
-print(game)
+    def update(self):
+        for x in range(self.board.size[0]):
+            for y in range(self.board.size[1]):
+                if self.board.show[x][y]:
+                    self.window[str(self.board.size[1]*x+y)].update(text=str(self.board.board[x][y]))
 
-layout = [[sg.Button(str('H'), key=str(game.size[1]*x+y)) for y in range(game.size[1])] for x in range(game.size[0])]
+    def run(self):
+        while True:
+            event, values = self.window.read()
+            try:
+                coords = int(event)
+                result = self.board.input((coords//self.board.size[1], coords%self.board.size[1]))
+                self.update()
+                if not result == 0:
+                    break
+            except TypeError:
+                if event == sg.WIN_CLOSED:
+                    break
+        print(result)
+        self.window.close()
 
-window = sg.Window("Minesweeper", layout, finalize=True)
-
-while True:
-    event, values = window.read()
-    try:
-        coords = int(event)
-        result = game.input((coords//game.size[1], coords%game.size[1]))
-        update_window(window, game)
-        if not result == 0:
-            print(result)
-            break
-    except TypeError:
-        if event == sg.WIN_CLOSED:
-            break
-
-window.close()
+game = Game(Board(12, 4))
+game.run()
