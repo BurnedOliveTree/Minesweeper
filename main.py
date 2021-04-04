@@ -3,6 +3,8 @@ import numpy as np
 
 sg.theme('DarkAmber')
 
+colours = {0: 'black', 1: 'dodger blue', 2: 'yellow green', 3: 'yellow', 4: 'red', 5: 'blue', 6: 'dark green', 7: 'dark orange', 8: 'maroon', 9: 'black'}
+
 class Board:
     def __init__(self, size_x, size_y=None, mines_amount=None):
         if size_y == None:
@@ -87,7 +89,7 @@ class Game:
         for x in range(self.board.size[0]):
             for y in range(self.board.size[1]):
                 if self.board.show[x][y]:
-                    self.window[str(self.board.size[1]*x+y)].update(text=str(self.board.board[x][y]))
+                    self.window[str(self.board.size[1]*x+y)].update(text=str(self.board.board[x][y]), button_color=('black', colours[self.board.board[x][y]]))
 
     def run(self):
         while True:
@@ -104,5 +106,5 @@ class Game:
         print(result)
         self.window.close()
 
-game = Game(Board(12, 4))
+game = Game(Board(12, 12))
 game.run()
