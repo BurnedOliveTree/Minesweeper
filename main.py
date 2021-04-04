@@ -3,7 +3,7 @@ import numpy as np
 
 sg.theme('DarkAmber')
 
-colours = {0: 'black', 1: 'dodger blue', 2: 'yellow green', 3: 'yellow', 4: 'red', 5: 'blue', 6: 'dark green', 7: 'dark orange', 8: 'maroon', 9: 'black'}
+colours = {0: 'black', 1: 'dodger blue', 2: 'yellow green', 3: 'orange', 4: 'orange red', 5: 'blue', 6: 'dark green', 7: 'dark orange', 8: 'maroon', 9: 'black'}
 
 class Board:
     def __init__(self, size_x, size_y=None, mines_amount=None):
@@ -82,7 +82,7 @@ class Board:
 class Game:
     def __init__(self, board=Board(10)):
         self.board = board
-        layout = [[sg.Button(str('H'), key=str(self.board.size[1]*x+y)) for y in range(self.board.size[1])] for x in range(self.board.size[0])]
+        layout = [[sg.Button(str('H'), key=str(self.board.size[1]*x+y), size=(2, 2)) for y in range(self.board.size[1])] for x in range(self.board.size[0])]
         self.window = sg.Window("Minesweeper", layout, finalize=True)
 
     def update(self):
