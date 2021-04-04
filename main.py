@@ -4,13 +4,18 @@ import numpy as np
 sg.theme('DarkAmber')
 
 class Board:
-    def __init__(self, size, mines_amount):
-        self.size = (size, size)
-        self.board = [[0 for x in range(size)] for y in range(size)]
-        self.show = [[False for x in range(size)] for y in range(size)]
+    def __init__(self, size_x, size_y=None, mines_amount=None):
+        if size_y == None:
+            size_y = size_x
+        if mines_amount == None:
+            mines_amount = size_x + size_y
+        self.size = (size_x, size_y)
+        print(self.size)
+        self.board = [[0 for y in range(self.size[1])] for x in range(self.size[0])]
+        self.show = [[False for y in range(self.size[1])] for x in range(self.size[0])]
         self.mines = mines_amount
-        for mine in np.random.choice(list(range(size**2)), mines_amount, replace=False):
-            self.board[mine//10][mine%10] = 9
+        for mine in np.random.choice(list(range(self.size[0]*self.size[1])), mines_amount, replace=False):
+            self.board[mine//self.size[1]][mine%self.size[1]] = 9
         for x in range(self.size[0]):
             for y in range(self.size[1]):
                 if self.board[x][y] == 9:
@@ -77,12 +82,12 @@ def update_window(window, board):
     for x in range(board.size[0]):
         for y in range(board.size[1]):
             if board.show[x][y]:
-                window[str(10*x+y)].update(text=str(game.board[x][y]))
+                window[str(board.size[1]*x+y)].update(text=str(board.board[x][y]))
 
-game = Board(10, 10)
+game = Board(12, 4)
 print(game)
 
-layout = [[sg.Button(str('H'), key=str(10*x+y)) for y in range(game.size[1])] for x in range(game.size[0])]
+layout = [[sg.Button(str('H'), key=str(game.size[1]*x+y)) for y in range(game.size[1])] for x in range(game.size[0])]
 
 window = sg.Window("Minesweeper", layout, finalize=True)
 
@@ -90,7 +95,7 @@ while True:
     event, values = window.read()
     try:
         coords = int(event)
-        result = game.input((coords//10, coords%10))
+        result = game.input((coords//game.size[1], coords%game.size[1]))
         update_window(window, game)
         if not result == 0:
             print(result)
