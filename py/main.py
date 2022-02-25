@@ -1,5 +1,5 @@
 import PySimpleGUI as sg
-import numpy as np
+from random import sample
 
 sg.theme('DarkAmber')
 
@@ -15,8 +15,8 @@ class Board:
         self.board = [[0 for y in range(self.size[1])] for x in range(self.size[0])]
         self.show = [[False for y in range(self.size[1])] for x in range(self.size[0])]
         self.mines = mines_amount
-        for mine in np.random.choice(list(range(self.size[0]*self.size[1])), mines_amount, replace=False):
-            self.board[mine//self.size[1]][mine%self.size[1]] = 9
+        for mine in sample(population=set(range(self.size[0]*self.size[1])), k=mines_amount):
+            self.board[mine // self.size[1]][mine % self.size[1]] = 9
         for x in range(self.size[0]):
             for y in range(self.size[1]):
                 if self.board[x][y] == 9:
@@ -80,7 +80,7 @@ class Board:
         return result
 
 class Game:
-    def __init__(self, board=Board(10)):
+    def __init__(self, board):
         self.board = board
         layout = [[sg.Button(str('H'), key=str(self.board.size[1]*x+y), size=(2, 2)) for y in range(self.board.size[1])] for x in range(self.board.size[0])]
         self.window = sg.Window("Minesweeper", layout, finalize=True)
