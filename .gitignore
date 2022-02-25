@@ -1,10 +1,5 @@
-.idea/
-cmake-build-debug/
-out/
-target/
 bin/
 obj/
+out/
 packages/
-riderModule.iml
-_ReSharper.Caches/
-
+target/
