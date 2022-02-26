@@ -3,8 +3,8 @@
 
 using namespace std;
 
-const char q = 1; // size of margin
-const char lw = 10 + 2 * q, lk = 10 + 2 * q, lm = 10;
+const char margin_size = 1;
+const char row_length = 10 + 2 * margin_size, column_length = 10 + 2 * margin_size, mines_amount = 10;
 
 void define_colour()
 {
@@ -20,31 +20,31 @@ void define_colour()
 }
 
 class Minesweeper {
-    short int t[lw][lk];
-    bool h[lw][lk];
-    unsigned short q = 1;
+    short int board[row_length][column_length];
+    bool show[row_length][column_length];
+    unsigned short margin_size = 1;
 
     void create_void()
     {
-        for (int w = 0; w < lw; w++)
+        for (int row = 0; row < row_length; row++)
         {
-            for (int k = 0; k < lk; k++)
+            for (int column = 0; column < column_length; column++)
             {
-                t[w][k] = 10;
+                board[row][column] = 10;
             }
         }
-        for (int w = q; w < lw - q; w++)
+        for (int row = margin_size; row < row_length - margin_size; row++)
         {
-            for (int k = q; k < lk - q; k++)
+            for (int column = margin_size; column < column_length - margin_size; column++)
             {
-                t[w][k] = 0;
+                board[row][column] = 0;
             }
         }
-        for (int w = 0; w < lw; w++)
+        for (int row = 0; row < row_length; row++)
         {
-            for (int k = 0; k < lk; k++)
+            for (int column = 0; column < column_length; column++)
             {
-                h[w][k] = false;
+                show[row][column] = false;
             }
         }
     }
@@ -53,40 +53,40 @@ class Minesweeper {
     {
         int m, n = 0, o;
         srand(time(nullptr));
-        while(n!=lm)
+        while(n!=mines_amount)
         {
-            m = rand()%(lw-2*q) + q, o = rand()%(lk-2*q) + q;
-            if(t[m][o]==0)
+            m = rand()%(row_length-2*margin_size) + margin_size, o = rand()%(column_length-2*margin_size) + margin_size;
+            if(board[m][o]==0)
             {
                 if(!((m==w0-1||m==w0||m==w0+1)&&(o==k0-1||o==k0||o==k0+1)))
                 {
-                    t[m][o]=9;
+                    board[m][o]=9;
                     n++;
                 }
             }
         }
-        for (int w=q; w<lw-q; w++)
+        for (int row=margin_size; row<row_length-margin_size; row++)
         {
-            for (int k=q; k<lk-q; k++)
+            for (int column=margin_size; column<column_length-margin_size; column++)
             {
-                if(t[w][k]==0)
+                if(board[row][column]==0)
                 {
-                    if(t[w-1][k-1]==9)
-                        t[w][k]+=1;
-                    if(t[w-1][k]==9)
-                        t[w][k]+=1;
-                    if(t[w-1][k+1]==9)
-                        t[w][k]+=1;
-                    if(t[w][k-1]==9)
-                        t[w][k]+=1;
-                    if(t[w][k+1]==9)
-                        t[w][k]+=1;
-                    if(t[w+1][k-1]==9)
-                        t[w][k]+=1;
-                    if(t[w+1][k]==9)
-                        t[w][k]+=1;
-                    if(t[w+1][k+1]==9)
-                        t[w][k]+=1;
+                    if(board[row-1][column-1]==9)
+                        board[row][column]+=1;
+                    if(board[row-1][column]==9)
+                        board[row][column]+=1;
+                    if(board[row-1][column+1]==9)
+                        board[row][column]+=1;
+                    if(board[row][column-1]==9)
+                        board[row][column]+=1;
+                    if(board[row][column+1]==9)
+                        board[row][column]+=1;
+                    if(board[row+1][column-1]==9)
+                        board[row][column]+=1;
+                    if(board[row+1][column]==9)
+                        board[row][column]+=1;
+                    if(board[row+1][column+1]==9)
+                        board[row][column]+=1;
                 }
             }
         }
@@ -95,28 +95,28 @@ class Minesweeper {
     void output()
     {
         cout << " ";
-        for (int k=q; k<lk-q; k++)
-            cout << " " << k-q+1;
+        for (int column=margin_size; column<column_length-margin_size; column++)
+            cout << " " << column-margin_size+1;
         cout << endl;
-        for (int w=q; w<lw-q; w++)
+        for (int row=margin_size; row<row_length-margin_size; row++)
         {
-            cout << w-q+1;
-            for (int k=q; k<lk-q; k++)
+            cout << row-margin_size+1;
+            for (int column=margin_size; column<column_length-margin_size; column++)
             {
                 cout << " ";
-                if(h[w][k])
+                if(show[row][column])
                 {
-                    if(t[w][k]==0)
+                    if(board[row][column]==0)
                         cout << BLUE;
-                    if(t[w][k]==1)
+                    if(board[row][column]==1)
                         cout << CYAN;
-                    if(t[w][k]==2)
+                    if(board[row][column]==2)
                         cout << GREEN;
-                    if(t[w][k]==3)
+                    if(board[row][column]==3)
                         cout << YELLOW;
-                    if(t[w][k]>=3)
+                    if(board[row][column]>=3)
                         cout << RED;
-                    cout << t[w][k];
+                    cout << board[row][column];
                 }
                 else
                 {
@@ -127,96 +127,95 @@ class Minesweeper {
         }
     }
 
-    void spread0(int w, int k)
+    void spread0(int row, int column)
     {
-        h[w-1][k-1]=true;
-        h[w-1][k]=true;
-        h[w-1][k+1]=true;
-        h[w][k-1]=true;
-        h[w][k+1]=true;
-        h[w+1][k-1]=true;
-        h[w+1][k]=true;
-        h[w+1][k+1]=true;
+        show[row-1][column-1]=true;
+        show[row-1][column]=true;
+        show[row-1][column+1]=true;
+        show[row][column-1]=true;
+        show[row][column+1]=true;
+        show[row+1][column-1]=true;
+        show[row+1][column]=true;
+        show[row+1][column+1]=true;
     }
 
-    void spread(int w, int k)
+    void spread(int row, int column)
     {
-        if(t[w-1][k-1]==0&&h[w-1][k-1])
+        if(board[row-1][column-1]==0&&show[row-1][column-1])
         {
-            spread0(w-1, k-1);
-            //spread(t, h, w-1, k-1);
+            spread0(row-1, column-1);
+            //spread(board, show, row-1, column-1);
         }
-        if(t[w-1][k]==0&&h[w-1][k])
+        if(board[row-1][column]==0&&show[row-1][column])
         {
-            spread0(w-1, k);
-            //spread(t, h, w-1, k);
+            spread0(row-1, column);
+            //spread(board, show, row-1, column);
         }
-        if(t[w-1][k+1]==0&&h[w-1][k+1])
+        if(board[row-1][column+1]==0&&show[row-1][column+1])
         {
-            spread0(w-1, k+1);
-            //spread(t, h, w-1, k+1);
+            spread0(row-1, column+1);
+            //spread(board, show, row-1, column+1);
         }
-        if(t[w][k-1]==0&&h[w][k])
+        if(board[row][column-1]==0&&show[row][column])
         {
-            spread0(w, k-1);
-            //spread(t, h, w, k-1);
+            spread0(row, column-1);
+            //spread(board, show, row, column-1);
         }
-        if(t[w][k+1]==0&&h[w][k])
+        if(board[row][column+1]==0&&show[row][column])
         {
-            spread0(w, k+1);
-            //spread(t, h, w, k+1);
+            spread0(row, column+1);
+            //spread(board, show, row, column+1);
         }
-        if(t[w+1][k-1]==0&&h[w][k])
+        if(board[row+1][column-1]==0&&show[row][column])
         {
-            spread0(w+1, k-1);
-            //spread(t, h, w+1, k-1);
+            spread0(row+1, column-1);
+            //spread(board, show, row+1, column-1);
         }
-        if(t[w+1][k]==0&&h[w][k])
+        if(board[row+1][column]==0&&show[row][column])
         {
-            spread0(w+1, k);
-            //spread(t, h, w+1, k);
+            spread0(row+1, column);
+            //spread(board, show, row+1, column);
         }
-        if(t[w+1][k+1]==0&&h[w][k])
+        if(board[row+1][column+1]==0&&show[row][column])
         {
-            spread0(w+1, k+1);
-            //spread(t, h, w+1, k+1);
+            spread0(row+1, column+1);
+            //spread(board, show, row+1, column+1);
         }
     }
 
     void input()
     {
-        int w, k;
-        cout << endl;
-        cout << "type in coordinates" << endl;
-        cin >> w >> k;
-        h[w][k]=true;
-        if(t[w][k]==0&&h[w][k])
+        int row, column;
+        cout << endl << "type in coordinates" << endl;
+        cin >> row >> column;
+        show[row][column]=true;
+        if(board[row][column]==0&&show[row][column])
         {
-            spread0(w, k);
-            spread(w, k);
+            spread0(row, column);
+            spread(row, column);
         }
     }
 
     bool check()
     {
-        for (int w=q; w<lw-q; w++)
+        for (int row=margin_size; row<row_length-margin_size; row++)
         {
-            for (int k=q; k<lk-q; k++)
+            for (int column=margin_size; column<column_length-margin_size; column++)
             {
-                if (h[w][k] && t[w][k] == 9)
+                if (show[row][column] && board[row][column] == 9)
                     return false;
             }
         }
         short int n = 0;
-        for (int w = q; w < lw - q; w++)
+        for (int row = margin_size; row < row_length - margin_size; row++)
         {
-            for (int k = q; k < lk - q; k++)
+            for (int column = margin_size; column < column_length - margin_size; column++)
             {
-                if (!h[w][k])
+                if (!show[row][column])
                     n++;
             }
         }
-        return n != lm;
+        return n != mines_amount;
     }
 public:
     Minesweeper() {
@@ -225,15 +224,14 @@ public:
     }
     int game() {
         output();
-        int w, k;
+        int row, column;
+        cout << endl << "type in coordinates (row column)" << endl;
+        cin >> row >> column;
+        board[row][column]=0;
+        show[row][column]=true;
+        spread0(row, column);
         cout << endl;
-        cout << "type in coordinates (w k)" << endl;
-        cin >> w >> k;
-        t[w][k]=0;
-        h[w][k]=true;
-        spread0(w, k);
-        cout << endl;
-        this->create_mines(w, k);
+        this->create_mines(row, column);
         this->output();
         while(check())
         {
