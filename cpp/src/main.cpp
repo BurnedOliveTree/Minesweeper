@@ -30,16 +30,12 @@ class Minesweeper {
         for (int row = 0; row < row_length; row++) {
             for (int column = 0; column < column_length; column++) {
                 board[row][column] = 10;
+                show[row][column] = false;
             }
         }
         for (int row = margin_size; row < row_length - margin_size; row++) {
             for (int column = margin_size; column < column_length - margin_size; column++) {
                 board[row][column] = 0;
-            }
-        }
-        for (int row = 0; row < row_length; row++) {
-            for (int column = 0; column < column_length; column++) {
-                show[row][column] = false;
             }
         }
     }
@@ -163,15 +159,11 @@ class Minesweeper {
     }
 
     bool check() {
+        short int n = 0;
         for (int row = margin_size; row < row_length - margin_size; row++) {
             for (int column = margin_size; column < column_length - margin_size; column++) {
                 if (show[row][column] && board[row][column] == 9)
                     return false;
-            }
-        }
-        short int n = 0;
-        for (int row = margin_size; row < row_length - margin_size; row++) {
-            for (int column = margin_size; column < column_length - margin_size; column++) {
                 if (!show[row][column])
                     n++;
             }
