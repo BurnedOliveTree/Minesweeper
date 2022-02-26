@@ -120,7 +120,6 @@ class Minesweeper {
 
     void spread(int row, int column) {
         if (board[row][column] == 0 && !isTileCompletelyDiscovered(row, column)) {
-            std::cout << row << " " << column << endl;
             show[row - 1][column - 1] = true;
             show[row - 1][column] = true;
             show[row - 1][column + 1] = true;
@@ -130,22 +129,14 @@ class Minesweeper {
             show[row + 1][column] = true;
             show[row + 1][column + 1] = true;
 
-            if (board[row - 1][column - 1] == 0)
-                spread(row - 1, column - 1);
-            if (board[row - 1][column] == 0)
-                spread(row - 1, column);
-            if (board[row - 1][column + 1] == 0)
-                spread(row - 1, column + 1);
-            if (board[row][column - 1] == 0)
-                spread(row, column - 1);
-            if (board[row][column + 1] == 0)
-                spread(row, column + 1);
-            if (board[row + 1][column - 1] == 0)
-                spread(row + 1, column - 1);
-            if (board[row + 1][column] == 0)
-                spread(row + 1, column);
-            if (board[row + 1][column + 1] == 0)
-                spread(row + 1, column + 1);
+            spread(row - 1, column - 1);
+            spread(row - 1, column);
+            spread(row - 1, column + 1);
+            spread(row, column - 1);
+            spread(row, column + 1);
+            spread(row + 1, column - 1);
+            spread(row + 1, column);
+            spread(row + 1, column + 1);
         }
     }
 
