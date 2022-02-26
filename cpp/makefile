@@ -10,7 +10,7 @@ check:
 	$(COMPILER) -v
 
 run:
-	out/minesweeper
+	out/minesweeper $(ARGS)
 
 clean:
 	rm out/minesweeper

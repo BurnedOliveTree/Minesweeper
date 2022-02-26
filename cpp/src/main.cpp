@@ -6,8 +6,7 @@ using namespace std;
 
 const char margin_size = 1;
 const char row_length = 10 + 2 * margin_size,
-           column_length = 10 + 2 * margin_size,
-           mines_amount = 10;
+           column_length = 10 + 2 * margin_size;
 
 void define_colour() {
     #define RESET "\033[0m"
@@ -24,7 +23,7 @@ void define_colour() {
 class Minesweeper {
     short int board[row_length][column_length];
     bool show[row_length][column_length];
-    unsigned short margin_size = 1;
+    unsigned short mines_amount;
 
     void create_void() {
         for (int row = 0; row < row_length; row++) {
@@ -163,7 +162,8 @@ class Minesweeper {
     }
 
 public:
-    Minesweeper() {
+    Minesweeper(int arg_mines_amount = 10) {
+        this->mines_amount = arg_mines_amount;
         define_colour();
         create_void();
     }
@@ -182,7 +182,12 @@ public:
     }
 };
 
-int main() {
+int main(int argc, char *argv[]) {
     Minesweeper game;
+    std::cout << argc << argv;
+    if (argc > 1) 
+        game = Minesweeper(std::stoi(argv[1]));
+    else
+        game = Minesweeper();
     return game.game();
 }
