@@ -1,5 +1,6 @@
 #include <iostream>
 #include <time.h>
+#include <utility>
 
 using namespace std;
 
@@ -109,6 +110,13 @@ class Minesweeper {
         }
     }
 
+    void conditional_spread(int row, int column) {
+        if (board[row][column] == 0) {
+            spread0(row, column);
+            spread(row, column);
+        }
+    }
+
     void spread0(int row, int column) {
         show[row - 1][column - 1] = true;
         show[row - 1][column] = true;
@@ -155,15 +163,13 @@ class Minesweeper {
         }
     }
 
-    void input() {
+    std::pair<int, int> input() {
         int row, column;
-        cout << endl << "type in coordinates" << endl;
+        cout << endl << "type in coordinates (row column)" << endl;
         cin >> row >> column;
         show[row][column] = true;
-        if (board[row][column] == 0 && show[row][column]) {
-            spread0(row, column);
-            spread(row, column);
-        }
+        cout << endl;
+        return std::pair<int, int>(row, column);
     }
 
     bool check() {
@@ -186,22 +192,17 @@ class Minesweeper {
 public:
     Minesweeper() {
         define_colour();
-        this->create_void();
+        create_void();
     }
     int game() {
         output();
-        int row, column;
-        cout << endl << "type in coordinates (row column)" << endl;
-        cin >> row >> column;
-        board[row][column] = 0;
-        show[row][column] = true;
-        spread0(row, column);
-        cout << endl;
-        this->create_mines(row, column);
-        this->output();
+        std::pair<int, int> coords = input();
+        create_mines(coords.first, coords.second);
+        conditional_spread(coords.first, coords.second);
+        output();
         while (check()) {
-            input();
-            cout << endl;
+            std::pair<int, int> coords = input();
+            conditional_spread(coords.first, coords.second);
             output();
         }
         return EXIT_SUCCESS;
