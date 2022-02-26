@@ -110,56 +110,46 @@ class Minesweeper {
         }
     }
 
-    void conditional_spread(int row, int column) {
-        if (board[row][column] == 0) {
-            spread0(row, column);
-            spread(row, column);
-        }
-    }
-
-    void spread0(int row, int column) {
-        show[row - 1][column - 1] = true;
-        show[row - 1][column] = true;
-        show[row - 1][column + 1] = true;
-        show[row][column - 1] = true;
-        show[row][column + 1] = true;
-        show[row + 1][column - 1] = true;
-        show[row + 1][column] = true;
-        show[row + 1][column + 1] = true;
+    bool isTileCompletelyDiscovered(int row, int column) {
+        return show[row - 1][column - 1] == true &&
+               show[row - 1][column] == true &&
+               show[row - 1][column + 1] == true &&
+               show[row][column - 1] == true &&
+               show[row][column] == true &&
+               show[row][column + 1] == true &&
+               show[row + 1][column - 1] == true &&
+               show[row + 1][column] == true &&
+               show[row + 1][column + 1] == true;
     }
 
     void spread(int row, int column) {
-        if (board[row - 1][column - 1] == 0 && show[row - 1][column - 1]) {
-            spread0(row - 1, column - 1);
-            // spread(board, show, row-1, column-1);
-        }
-        if (board[row - 1][column] == 0 && show[row - 1][column]) {
-            spread0(row - 1, column);
-            // spread(board, show, row-1, column);
-        }
-        if (board[row - 1][column + 1] == 0 && show[row - 1][column + 1]) {
-            spread0(row - 1, column + 1);
-            // spread(board, show, row-1, column+1);
-        }
-        if (board[row][column - 1] == 0 && show[row][column]) {
-            spread0(row, column - 1);
-            // spread(board, show, row, column-1);
-        }
-        if (board[row][column + 1] == 0 && show[row][column]) {
-            spread0(row, column + 1);
-            // spread(board, show, row, column+1);
-        }
-        if (board[row + 1][column - 1] == 0 && show[row][column]) {
-            spread0(row + 1, column - 1);
-            // spread(board, show, row+1, column-1);
-        }
-        if (board[row + 1][column] == 0 && show[row][column]) {
-            spread0(row + 1, column);
-            // spread(board, show, row+1, column);
-        }
-        if (board[row + 1][column + 1] == 0 && show[row][column]) {
-            spread0(row + 1, column + 1);
-            // spread(board, show, row+1, column+1);
+        if (board[row][column] == 0 && !isTileCompletelyDiscovered(row, column)) {
+            std::cout << row << " " << column << endl;
+            show[row - 1][column - 1] = true;
+            show[row - 1][column] = true;
+            show[row - 1][column + 1] = true;
+            show[row][column - 1] = true;
+            show[row][column + 1] = true;
+            show[row + 1][column - 1] = true;
+            show[row + 1][column] = true;
+            show[row + 1][column + 1] = true;
+
+            if (board[row - 1][column - 1] == 0)
+                spread(row - 1, column - 1);
+            if (board[row - 1][column] == 0)
+                spread(row - 1, column);
+            if (board[row - 1][column + 1] == 0)
+                spread(row - 1, column + 1);
+            if (board[row][column - 1] == 0)
+                spread(row, column - 1);
+            if (board[row][column + 1] == 0)
+                spread(row, column + 1);
+            if (board[row + 1][column - 1] == 0)
+                spread(row + 1, column - 1);
+            if (board[row + 1][column] == 0)
+                spread(row + 1, column);
+            if (board[row + 1][column + 1] == 0)
+                spread(row + 1, column + 1);
         }
     }
 
@@ -198,11 +188,11 @@ public:
         output();
         std::pair<int, int> coords = input();
         create_mines(coords.first, coords.second);
-        conditional_spread(coords.first, coords.second);
+        spread(coords.first, coords.second);
         output();
         while (check()) {
             std::pair<int, int> coords = input();
-            conditional_spread(coords.first, coords.second);
+            spread(coords.first, coords.second);
             output();
         }
         return EXIT_SUCCESS;
