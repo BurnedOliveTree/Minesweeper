@@ -1,5 +1,5 @@
 #include <iostream>
-#include <time.h>
+#include <random>
 #include <utility>
 
 using namespace std;
@@ -41,10 +41,12 @@ class Minesweeper {
 
     void create_mines(int w0, int k0) {
         int m, n = 0, o;
-        srand(time(nullptr));
+        std::random_device rd;
+        std::mt19937 gen(rd());
+        std::uniform_int_distribution<> distr(margin_size, row_length + margin_size);
         while (n != mines_amount) {
-            m = rand() % (row_length - 2 * margin_size) + margin_size,
-            o = rand() % (column_length - 2 * margin_size) + margin_size;
+            m = distr(gen);
+            o = distr(gen);
             if (board[m][o] == 0) {
                 if (!((m == w0 - 1 || m == w0 || m == w0 + 1) && (o == k0 - 1 || o == k0 || o == k0 + 1))) {
                     board[m][o] = 9;
@@ -184,7 +186,6 @@ public:
 
 int main(int argc, char *argv[]) {
     Minesweeper game;
-    std::cout << argc << argv;
     if (argc > 1) 
         game = Minesweeper(std::stoi(argv[1]));
     else
