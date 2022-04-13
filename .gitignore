@@ -1,5 +1,8 @@
+.*/
 bin/
+build/
 obj/
 out/
 packages/
+project/
 target/
